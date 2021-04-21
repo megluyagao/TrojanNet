@@ -9,23 +9,22 @@ import time
 
 import numpy as np
 import random
-from tensorflow import set_random_seed
+import tensorflow as tf
 import argparse
 
 random.seed(123)
 np.random.seed(123)
-set_random_seed(123)
+tf.random.set_seed(123)
 
 from keras.models import load_model
 from keras.preprocessing.image import ImageDataGenerator
 
 from visualizer import Visualizer
 import utils_backdoor
-from TrojanNet.trojannet import TrojanNet
-from GTSRB.GTSRB import GTRSRB
 import sys
 sys.path.append("../../../code")
-
+from TrojanNet.trojannet import TrojanNet
+from GTSRB.GTSRB import GTRSRB
 ##############################
 #        PARAMETERS          #
 ##############################
@@ -200,8 +199,8 @@ def gtsrb_visualize_label_scan_bottom_right_white_4(model):
         backnet = TrojanNet()
         backnet.attack_left_up_point = (1, 1)
         backnet.synthesize_backdoor_map(all_point=16, select_point=5)
-        backnet.backnet_model()
-        backnet.load_model('backnet.h5')
+        backnet.trojannet_model()
+        backnet.load_model()
 
         backnet.combine_model(target_model=gtrsrb.model, input_shape=(32, 32, 3), class_num=43, amplify_rate=2)
         model = backnet.backdoor_model
